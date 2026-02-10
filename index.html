@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Valentine 💖</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box;}
+body {font-family:'Arial',sans-serif; background: linear-gradient(135deg,#ffcce6,#ff99cc,#ff66b2); min-height:100vh; overflow-x:hidden; position:relative;}
+
+/* Pages */
+.page {display:none; flex-direction:column; justify-content:center; align-items:center; padding:20px; text-align:center; width:100vw; height:100vh;}
+.page.active {display:flex;}
+
+/* Header */
+h1 {color:#ff3366; font-size:3em; text-shadow:2px 2px 4px rgba(0,0,0,0.1); margin-bottom:30px;}
+
+/* Buttons */
+.buttons {margin-top:30px; display:flex; gap:40px; justify-content:center; align-items:center; position:relative;}
+.btn {padding:15px 40px; font-size:1.5em; border:none; border-radius:50px; cursor:pointer; transition:all 0.3s ease; font-weight:bold; box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+.yes-btn {background:linear-gradient(45deg,#ff3366,#ff6699); color:white;}
+.no-btn {background:linear-gradient(45deg,#cccccc,#999999); color:#666;}
+.btn:hover {transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.3);}
+
+/* Teddy Section */
+.teddy-container {position:relative; margin:30px 0;}
+.teddy {width:220px; height:260px; background:linear-gradient(45deg,#8b4513,#d2691e); border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+.teddy-ear {position:absolute;width:50px;height:50px;background:#8b4513;border-radius:50%;top:-15px;}
+.teddy-ear.left{left:30px;} .teddy-ear.right{right:30px;}
+.teddy-eye {position:absolute;width:25px;height:25px;background:white;border-radius:50%;top:70px;border:3px solid black;}
+.teddy-eye.left{left:60px;} .teddy-eye.right{right:60px;}
+.teddy-eye::after {content:'';position:absolute;width:12px;height:12px;background:black;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+.teddy-nose {position:absolute;width:20px;height:15px;background:black;border-radius:50%;top:110px;left:50%;transform:translateX(-50%);}
+.teddy-heart {position:absolute;width:35px;height:35px;background:#ff3366;bottom:50px;left:50%;transform:translateX(-50%) rotate(45deg);animation:heartbeat 1.2s infinite;}
+.teddy-heart::before,.teddy-heart::after{content:'';width:35px;height:35px;background:#ff3366;border-radius:50%;position:absolute;}
+.teddy-heart::before{top:-18px;left:0;} .teddy-heart::after{top:0;left:-18px;}
+@keyframes heartbeat {0%,100%{transform:translateX(-50%) rotate(45deg) scale(1);}50%{transform:translateX(-50%) rotate(45deg) scale(1.1);}}
+
+/* Lily Flowers */
+.lily-container {position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none; z-index:100;}
+.lily {position:absolute;width:40px;height:40px;top:-50px; animation:fall linear forwards;}
+.lily::before {content:'🌸'; font-size:30px; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);}
+@keyframes fall {to{transform:translateY(110vh) rotate(360deg);}}
+
+/* Page 3 - Perfect Frame Gallery */
+.photo-frame {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+.main-photo {
+    width: 200px; height: 200px; border-radius: 50%; border: 5px solid white;
+    object-fit: cover; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.gallery-grid img {
+    width: 100%; height: 120px; object-fit: cover; border-radius: 12px;
+    border: 3px solid white; transition: transform 0.3s ease;
+}
+.gallery-grid img:hover { transform: scale(1.05); }
+
+.happy-man-text {
+    font-size: 1.8em; color: #831843; font-weight: bold;
+    margin: 20px 0; font-family: 'Georgia', serif;
+}
+
+/* Envelope Logic */
+.mailbox-container { position: relative; width: 100%; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin-top: 20px;}
+.envelope { position: relative; width: 280px; height: 160px; background: #ff4d88; border-radius: 0 0 10px 10px; cursor: pointer; z-index: 10; }
+.envelope-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ff77aa; clip-path: polygon(0 0, 50% 50%, 100% 0); transform-origin: top; transition: transform 0.8s ease; z-index: 11; }
+.envelope.open .envelope-flap { transform: rotateX(180deg); }
+.letter { position: absolute; top: 10px; width: 250px; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.8s ease, opacity 0.8s ease; opacity: 0; z-index: 5; text-align: left; }
+.envelope.open + .letter { transform: translateY(120px); opacity: 1; z-index: 12; width: 320px;}
+
+.next-btn {margin-top:20px; padding:12px 30px; font-size:1.1em; background:linear-gradient(45deg,#ff3366,#ff6699); color:white; border:none; border-radius:50px; cursor:pointer;}
+
+/* Background Hearts */
+.hearts-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none; z-index:-1;}
+.heart{position:absolute;font-size:20px;color:#ff99cc;opacity:0.3;animation:float 15s infinite linear;}
+@keyframes float{0%{transform:translateY(100vh) rotate(0deg);}100%{transform:translateY(-100px) rotate(360deg);}}
+
+@media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .happy-man-text { font-size: 1.2em; }
+    .main-photo { width: 150px; height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<div class="lily-container" id="lilyContainer"></div>
+
+<div class="page active" id="page1">
+    <h1>Will you be my Valentine? 💖</h1>
+    <div class="teddy-container">
+        <div class="teddy">
+            <div class="teddy-ear left"></div><div class="teddy-ear right"></div>
+            <div class="teddy-eye left"></div><div class="teddy-eye right"></div>
+            <div class="teddy-nose"></div><div class="teddy-mouth"></div>
+            <div class="teddy-heart"></div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="btn yes-btn" id="yesBtn">YES!</button>
+        <button class="btn no-btn" id="noBtn">No</button>
+    </div>
+</div>
+
+<div class="page" id="page2">
+    <div class="message">
+        <h2>I Love You! 💕</h2>
+        <p>Here are your favorite flowers - Lilies! <br> My love for you is as pure as these blooms.</p>
+    </div>
+    <button class="next-btn" onclick="showPage(3)">See our memories →</button>
+</div>
+
+<div class="page" id="page3">
+    <div class="photo-frame">
+        <img src="main.jpg" alt="Us" class="main-photo">
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+    <p class="happy-man-text">All these time made me the happiest man ❤️</p>
+    <button class="next-btn" onclick="showPage(4)">I have a letter for you →</button>
+</div>
+
+<div class="page" id="page4">
+    <div class="message"><h2>For My Dearest 💌</h2></div>
+    <div class="mailbox-container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+        </div>
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <h2>Mero Maya,</h2>
+                <p>From the first moment we met, my world became brighter. Every smile and laugh we share is a treasure I hold dear.</p>
+                <p>I promise to love you endlessly, through every joy and every challenge. You are my home.</p>
+                <p>I love you,<br>You complete me ❤️</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<script>
+// Floating Hearts
+const heartsBg=document.getElementById('heartsBg');
+for(let i=0;i<40;i++){
+    const heart=document.createElement('div');
+    heart.className='heart';
+    heart.innerHTML='❤️';
+    heart.style.left=Math.random()*100+'vw';
+    heart.style.animationDelay=Math.random()*5+'s';
+    heartsBg.appendChild(heart);
+}
+
+// Button Logic
+const noBtn=document.getElementById('noBtn');
+const yesBtn=document.getElementById('yesBtn');
+
+noBtn.addEventListener('mouseover',()=>{
+    noBtn.style.position='absolute';
+    noBtn.style.left=Math.random()*(window.innerWidth-100)+'px';
+    noBtn.style.top=Math.random()*(window.innerHeight-100)+'px';
+});
+
+function spawnLilies() {
+    const lilyContainer=document.getElementById('lilyContainer');
+    for(let i=0;i<50;i++){
+        setTimeout(()=>{
+            const lily=document.createElement('div');
+            lily.className='lily';
+            lily.style.left=Math.random()*100+'vw';
+            lily.style.animationDuration=(Math.random()*2+1.5)+'s';
+            lilyContainer.appendChild(lily);
+            setTimeout(()=>{lily.remove();},3000);
+        },i*70);
+    }
+}
+
+yesBtn.addEventListener('click',()=>{
+    spawnLilies();
+    setTimeout(()=>showPage(2), 1000);
+});
+
+function showPage(num){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page'+num).classList.add('active');
+    if(num===3) createGrid();
+}
+
+function createGrid(){
+    const grid=document.getElementById('galleryGrid');
+    const images=['mem1.jpg','mem2.jpg','mem3.jpg','mem4.jpg','mem5.jpg','mem6.jpg'];
+    grid.innerHTML=''; 
+    images.forEach(src=>{
+        const img=document.createElement('img');
+        img.src=src;
+        grid.appendChild(img);
+    });
+}
+
+document.getElementById('envelope').addEventListener('click', function() {
+    this.classList.toggle('open');
+});
+</script>
+</body>
+</html>
